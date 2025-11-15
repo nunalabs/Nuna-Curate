@@ -35,7 +35,8 @@ export class StellarService {
   }
 
   /**
-   * Verify a signature
+   * Verify a signature from wallet
+   * Handles both raw message signatures and transaction signatures
    */
   verifySignature(
     publicKey: string,
@@ -44,12 +45,35 @@ export class StellarService {
   ): boolean {
     try {
       const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
-      const messageBuffer = Buffer.from(message, 'utf8');
-      const signatureBuffer = Buffer.from(signature, 'base64');
 
-      return keypair.verify(messageBuffer, signatureBuffer);
+      // Try to decode the signature
+      let signatureBuffer: Buffer;
+      try {
+        // First try base64 decoding
+        signatureBuffer = Buffer.from(signature, 'base64');
+      } catch {
+        // If that fails, try hex decoding
+        signatureBuffer = Buffer.from(signature, 'hex');
+      }
+
+      // Create a hash of the message (wallet usually signs the hash)
+      const messageBuffer = Buffer.from(message, 'utf8');
+      const hash = StellarSdk.hash(messageBuffer);
+
+      // Try to verify with the hash first (most common for wallets)
+      if (keypair.verify(hash, signatureBuffer)) {
+        return true;
+      }
+
+      // Fallback: try to verify with raw message
+      if (keypair.verify(messageBuffer, signatureBuffer)) {
+        return true;
+      }
+
+      this.logger.warn(`Signature verification failed for key: ${publicKey}`);
+      return false;
     } catch (error) {
-      this.logger.error('Signature verification failed', error);
+      this.logger.error('Signature verification error', error);
       return false;
     }
   }
