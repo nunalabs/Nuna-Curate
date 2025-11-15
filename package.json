@@ -9,14 +9,16 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build",
+    "build": "turbo run build --filter=@nuna-curate/web",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "contracts:build": "cd packages/contracts && cargo build --target wasm32-unknown-unknown --release",
     "contracts:test": "cd packages/contracts && cargo test",
-    "contracts:deploy": "cd packages/contracts && ./scripts/deploy.sh"
+    "contracts:deploy": "cd packages/contracts && ./scripts/deploy.sh",
+    "vercel-build": "npm install -g pnpm@8.15.0 && pnpm install && turbo run build --filter=@nuna-curate/web",
+    "postinstall": "echo 'Skipping default install - using vercel-build instead'"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
