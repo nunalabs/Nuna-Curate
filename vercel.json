@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "turbo run build --filter=@nuna-curate/web",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "installCommand": "bash scripts/install.sh",
   "framework": "nextjs",
   "outputDirectory": "apps/web/.next"
 }
