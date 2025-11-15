@@ -1,5 +1,10 @@
 # Vercel Deployment Setup for Nuna Curate
 
+## 🚀 Quick Start (Recommended)
+
+The project is configured with automatic pnpm 8.x installation via Corepack.
+Just import from GitHub and add environment variables - it should work automatically!
+
 ## ⚙️ Project Settings
 
 ### General Settings
@@ -13,36 +18,23 @@ Next.js
 ```
 ./
 ```
-(Leave at root - monorepo setup)
+⚠️ **IMPORTANT:** Keep at root (not `apps/web`) for monorepo support
 
 **Node.js Version:**
 ```
 20.x
 ```
+(Vercel auto-detects from `.nvmrc`)
 
 ### Build & Development Settings
 
-The `vercel.json` file handles most settings automatically, but verify these if needed:
+The `vercel.json` file handles ALL settings automatically:
 
-**Build Command:**
-```
-turbo run build --filter=@nuna-curate/web
-```
+- ✅ **Install Command:** `bash scripts/install.sh` (auto-installs pnpm 8.15.0)
+- ✅ **Build Command:** `turbo run build --filter=@nuna-curate/web`
+- ✅ **Output Directory:** `apps/web/.next`
 
-**Output Directory:**
-```
-apps/web/.next
-```
-
-**Install Command:**
-```
-pnpm install --frozen-lockfile
-```
-
-**Development Command:**
-```
-turbo run dev --filter=@nuna-curate/web
-```
+**You don't need to configure anything manually!**
 
 ## 🔐 Environment Variables
 
