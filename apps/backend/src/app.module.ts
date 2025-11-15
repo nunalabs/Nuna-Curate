@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bull';
+import { APP_GUARD } from '@nestjs/core';
 
 // Modules
 import { DatabaseModule } from './database/database.module';
@@ -11,10 +12,11 @@ import { UsersModule } from './modules/users/users.module';
 import { NFTModule } from './modules/nft/nft.module';
 import { CollectionsModule } from './modules/collections/collections.module';
 import { MarketplaceModule } from './modules/marketplace/marketplace.module';
-import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { StellarModule } from './modules/stellar/stellar.module';
 import { StorageModule } from './modules/storage/storage.module';
-import { WebsocketModule } from './modules/websocket/websocket.module';
+
+// Guards
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 // Config
 import { databaseConfig } from './config/database.config';
@@ -77,10 +79,15 @@ import { stellarConfig } from './config/stellar.config';
     NFTModule,
     CollectionsModule,
     MarketplaceModule,
-    AnalyticsModule,
     StellarModule,
     StorageModule,
-    WebsocketModule,
+  ],
+  providers: [
+    // Global JWT authentication guard
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule {}
