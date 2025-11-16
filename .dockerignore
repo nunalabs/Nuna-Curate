@@ -1,0 +1,103 @@
+# ==============================================================================
+# NUNA CURATE - DOCKER IGNORE
+# ==============================================================================
+# Exclude files and directories from Docker build context
+# This significantly reduces build time and image size
+# ==============================================================================
+
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store
+
+# Build outputs
+dist
+build
+.next
+out
+*.tsbuildinfo
+
+# Development files
+.env*.local
+.env.development
+*.development.env
+
+# Testing
+coverage
+.nyc_output
+*.test.ts
+*.spec.ts
+**/__tests__
+**/__mocks__
+test
+tests
+
+# IDE and Editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs
+.github
+
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+.circleci
+azure-pipelines.yml
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Rust/Contracts (not needed in Node.js apps)
+packages/contracts/target
+packages/contracts/**/*.wasm
+*.wasm
+
+# Logs
+logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp
+temp
+*.tmp
+
+# Caches
+.cache
+.parcel-cache
+.turbo
+
+# Monorepo specific
+.changeset
+
+# Package manager
+.npmrc
+.yarnrc
+.pnpm-debug.log
+
+# Environment variables (except production template)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

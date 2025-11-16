@@ -1,0 +1,157 @@
+# ============================================================================
+# NUNA CURATE - DOCKER COMPOSE CONFIGURATION
+# ============================================================================
+# Production-ready development environment with all required services
+#
+# Services:
+#   - PostgreSQL: Main database for NFTs, listings, users
+#   - Redis: Caching and real-time data
+#   - PgAdmin: Database management UI
+#
+# Usage:
+#   docker-compose up -d              # Start all services
+#   docker-compose down               # Stop all services
+#   docker-compose logs -f [service]  # View logs
+# ============================================================================
+
+version: '3.9'
+
+services:
+  # ==========================================================================
+  # POSTGRESQL DATABASE
+  # ==========================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: nuna-curate-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nuna_user
+      POSTGRES_PASSWORD: nuna_password_dev
+      POSTGRES_DB: nuna_curate
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=en_US.UTF-8"
+      # Performance tuning
+      POSTGRES_MAX_CONNECTIONS: "200"
+      POSTGRES_SHARED_BUFFERS: "256MB"
+      POSTGRES_EFFECTIVE_CACHE_SIZE: "1GB"
+      POSTGRES_MAINTENANCE_WORK_MEM: "64MB"
+      POSTGRES_CHECKPOINT_COMPLETION_TARGET: "0.9"
+      POSTGRES_WAL_BUFFERS: "16MB"
+      POSTGRES_DEFAULT_STATISTICS_TARGET: "100"
+      POSTGRES_RANDOM_PAGE_COST: "1.1"
+      POSTGRES_EFFECTIVE_IO_CONCURRENCY: "200"
+      POSTGRES_WORK_MEM: "4MB"
+      POSTGRES_MIN_WAL_SIZE: "1GB"
+      POSTGRES_MAX_WAL_SIZE: "4GB"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./apps/backend/database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./apps/backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    networks:
+      - nuna-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nuna_user -d nuna_curate"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ==========================================================================
+  # REDIS CACHE
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: nuna-curate-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --tcp-backlog 511
+      --timeout 0
+      --tcp-keepalive 300
+      --databases 16
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --rdbcompression yes
+      --rdbchecksum yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - nuna-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  # ==========================================================================
+  # PGADMIN (Database Management UI)
+  # ==========================================================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: nuna-curate-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@nunacurate.com
+      PGADMIN_DEFAULT_PASSWORD: admin_dev_password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./apps/backend/database/pgadmin-servers.json:/pgadmin4/servers.json:ro
+    networks:
+      - nuna-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ==========================================================================
+  # REDIS COMMANDER (Redis Management UI) - Optional
+  # ==========================================================================
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: nuna-curate-redis-commander
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - nuna-network
+    depends_on:
+      redis:
+        condition: service_healthy
+
+# ==============================================================================
+# NETWORKS
+# ==============================================================================
+networks:
+  nuna-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# ==============================================================================
+# VOLUMES
+# ==============================================================================
+volumes:
+  postgres_data:
+    driver: local
+    name: nuna-curate-postgres-data
+  redis_data:
+    driver: local
+    name: nuna-curate-redis-data
+  pgadmin_data:
+    driver: local
+    name: nuna-curate-pgadmin-data

@@ -21,4 +21,17 @@ pub enum Error {
     InvalidAddress = 30,
     InvalidTokenId = 31,
     InvalidMetadata = 32,
+
+    // Royalty errors
+    InvalidRoyalty = 40,
+
+    // Batch operation errors
+    BatchTooLarge = 50,
+    BatchEmpty = 51,
+    InvalidBatchSize = 52,
+
+    // Signature errors
+    SignatureExpired = 60,
+    InvalidNonce = 61,
+    InvalidSignature = 62,
 }

@@ -3,36 +3,40 @@ use soroban_sdk::{Address, Env};
 /// Get royalty information from NFT contract
 ///
 /// Returns (recipient_address, royalty_amount)
+/// Follows ERC-2981 standard for royalties
 pub fn get_royalty_info(
     env: &Env,
     nft_contract: &Address,
     token_id: u64,
     sale_price: i128,
 ) -> (Address, i128) {
-    // This would call the royalty_info function on the NFT contract
-    // Following ERC-2981 standard: royalty_info(token_id, sale_price) -> (receiver, royalty_amount)
+    use royalty_interface::NFTRoyaltyClient;
 
-    // Placeholder implementation
-    // In production, this would be a cross-contract call:
-    // let (receiver, amount) = nft_contract.royalty_info(token_id, sale_price);
+    // Create client for NFT contract's royalty interface
+    let royalty_client = NFTRoyaltyClient::new(env, nft_contract);
 
-    // For now, return zero royalty
-    // The actual implementation would look like:
-    /*
-    use soroban_sdk::IntoVal;
+    // Try to get royalty info, fallback to zero if not supported
+    // This allows backwards compatibility with NFTs without royalties
+    match royalty_client.try_royalty_info(&token_id, &sale_price) {
+        Ok(result) => result,
+        Err(_) => {
+            // NFT doesn't support royalties, return zero
+            let zero_address = env.current_contract_address();
+            (zero_address, 0)
+        }
+    }
+}
 
-    let result: (Address, i128) = env.invoke_contract(
-        nft_contract,
-        &soroban_sdk::symbol_short!("roy_info"),
-        (token_id, sale_price).into_val(env),
-    );
+/// Interface for calling NFT contract royalty functions (ERC-2981)
+mod royalty_interface {
+    use soroban_sdk::{contractclient, Address, Env};
 
-    result
-    */
-
-    // Temporary: return zero royalty with a placeholder address
-    let zero_address = env.current_contract_address();
-    (zero_address, 0)
+    #[contractclient(name = "NFTRoyaltyClient")]
+    pub trait NFTRoyaltyInterface {
+        /// Get royalty info for a token sale
+        /// Returns (receiver address, royalty amount)
+        fn royalty_info(env: Env, token_id: u64, sale_price: i128) -> (Address, i128);
+    }
 }
 
 /// Validate royalty percentage (in basis points)

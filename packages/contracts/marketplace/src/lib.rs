@@ -62,6 +62,7 @@ impl MarketplaceContract {
         admin: Address,
         platform_fee_bps: u32,
         fee_recipient: Address,
+        xlm_token: Address,
     ) -> Result<(), Error> {
         if is_initialized(&env) {
             return Err(Error::AlreadyInitialized);
@@ -77,8 +78,12 @@ impl MarketplaceContract {
         set_admin(&env, &admin);
         set_platform_fee(&env, platform_fee_bps);
         set_fee_recipient(&env, &fee_recipient);
+        set_xlm_token_address(&env, &xlm_token);
         set_listing_counter(&env, 0);
         set_offer_counter(&env, 0);
+
+        // Bump instance TTL on initialization
+        bump_instance(&env);
 
         events::emit_marketplace_initialized(&env, &admin, platform_fee_bps);
 
@@ -468,23 +473,30 @@ fn calculate_fee(amount: i128, fee_bps: u32) -> i128 {
     (amount * fee_bps as i128) / 10000
 }
 
-/// Transfer XLM between accounts
+/// Transfer XLM between accounts using Stellar Asset Contract
 fn transfer_xlm(
     env: &Env,
     from: &Address,
     to: &Address,
     amount: i128,
 ) -> Result<(), Error> {
-    // In production, this would use the Stellar Asset Contract for XLM transfers
-    // For now, we'll assume XLM is the native asset
+    use soroban_sdk::token;
 
-    // This is a placeholder - actual implementation would use:
-    // stellar_asset_contract::transfer(env, from, to, amount);
+    // Get the native XLM token contract address
+    // On Stellar mainnet/testnet, XLM is represented as a Stellar Asset Contract
+    let xlm_address = get_xlm_token_address(env);
+
+    // Create token client for XLM
+    let xlm_token = token::Client::new(env, &xlm_address);
+
+    // Transfer XLM from buyer to recipient
+    // This will fail if buyer doesn't have enough balance or hasn't approved
+    xlm_token.transfer(from, to, &amount);
 
     Ok(())
 }
 
-/// Transfer NFT via NFT contract
+/// Transfer NFT via cross-contract call to NFT contract
 fn transfer_nft(
     env: &Env,
     nft_contract: &Address,
@@ -492,10 +504,49 @@ fn transfer_nft(
     to: &Address,
     token_id: u64,
 ) -> Result<(), Error> {
-    // This would call the NFT contract's transfer_from function
-    // Placeholder for actual cross-contract call
+    use nft_interface::NFTContractClient;
+
+    // Create a client for the NFT contract using its interface
+    // We'll call transfer_from as the marketplace (authorized operator)
+    let nft_client = NFTContractClient::new(env, nft_contract);
+
+    // The marketplace contract must be approved to transfer this NFT
+    // This should have been done when the listing was created
+    nft_client.transfer_from(
+        &env.current_contract_address(), // spender (this marketplace)
+        from,                             // current owner
+        to,                               // new owner
+        &token_id,
+    );
 
     Ok(())
+}
+
+/// Get XLM token address for the current network
+/// This is the Stellar Asset Contract (SAC) address for native XLM
+fn get_xlm_token_address(env: &Env) -> Address {
+    // On Stellar, native XLM has a deterministic contract address
+    // This is computed from the Stellar Asset (native)
+    // For now, we'll store it in contract storage during initialization
+    storage::get_xlm_token_address(env)
+        .expect("XLM token address not configured")
+}
+
+/// Client interface for calling NFT contract functions
+mod nft_interface {
+    use soroban_sdk::{contractclient, Address, Env};
+
+    #[contractclient(name = "NFTContractClient")]
+    pub trait NFTContractInterface {
+        /// Transfer NFT with approval (without Result for simplicity)
+        fn transfer_from(
+            env: Env,
+            spender: Address,
+            from: Address,
+            to: Address,
+            token_id: u64,
+        );
+    }
 }
 
 #[cfg(test)]

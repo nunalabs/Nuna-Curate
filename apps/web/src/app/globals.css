@@ -2,50 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================================
+   🏛️ NUNA CURATE - MUSEO DIGITAL NFT
+   Sistema de diseño basado en investigación de museos NFT y psicología del color
+   ============================================================================ */
+
 @layer base {
+  /* 🎨 MODO CLARO - Galería de Día */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Backgrounds */
+    --background: 270 30% 99%;           /* #faf9fc - Blanco con tinte púrpura */
+    --foreground: 270 50% 10%;           /* #1a1625 - Púrpura muy oscuro */
+
+    /* Cards & Surfaces */
+    --card: 0 0% 100%;                   /* #ffffff - Blanco puro */
+    --card-foreground: 270 50% 10%;
+
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --popover-foreground: 270 50% 10%;
+
+    /* Primary - Purple Royal (#9a7ad7) */
+    --primary: 260 55% 66%;              /* #9a7ad7 */
+    --primary-foreground: 270 30% 99%;
+
+    /* Secondary - Golden Amber (#e4af25) */
+    --secondary: 42 80% 52%;             /* #e4af25 */
+    --secondary-foreground: 270 50% 10%;
+
+    /* Muted */
+    --muted: 270 20% 96%;                /* Gris púrpura muy claro */
+    --muted-foreground: 270 15% 45%;     /* #6b5f7a - Gris púrpura */
+
+    /* Accent - Coral Orange (#ec5a31) */
+    --accent: 14 82% 56%;                /* #ec5a31 */
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive - Crimson Red (#da3617) */
+    --destructive: 9 78% 47%;            /* #da3617 */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 270 20% 90%;
+    --input: 270 20% 90%;
+    --ring: 260 55% 66%;                 /* Purple Royal */
+
+    /* Radius */
+    --radius: 0.75rem;                   /* Más generoso para feeling museo */
   }
 
+  /* 🌙 MODO OSCURO - Galería Nocturna (RECOMENDADO) */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    /* Backgrounds - Púrpura profundo */
+    --background: 270 40% 8%;            /* #1a1625 - Púrpura muy oscuro */
+    --foreground: 270 20% 96%;           /* #f5f3f7 - Casi blanco */
+
+    /* Cards & Surfaces */
+    --card: 270 35% 12%;                 /* #2a2035 - Púrpura oscuro */
+    --card-foreground: 270 20% 96%;
+
+    /* Popover */
+    --popover: 270 35% 12%;
+    --popover-foreground: 270 20% 96%;
+
+    /* Primary - Purple Royal (más brillante en dark) */
+    --primary: 260 55% 66%;              /* #9a7ad7 */
+    --primary-foreground: 270 20% 96%;
+
+    /* Secondary - Golden Amber */
+    --secondary: 42 80% 52%;             /* #e4af25 */
+    --secondary-foreground: 270 40% 8%;
+
+    /* Muted */
+    --muted: 270 30% 20%;                /* Púrpura oscuro mate */
+    --muted-foreground: 270 15% 70%;     /* #b8afc8 - Gris púrpura claro */
+
+    /* Accent - Coral Orange */
+    --accent: 14 82% 56%;                /* #ec5a31 */
+    --accent-foreground: 270 20% 96%;
+
+    /* Destructive - Crimson Red */
+    --destructive: 9 78% 47%;            /* #da3617 */
+    --destructive-foreground: 270 20% 96%;
+
+    /* Borders & Inputs */
+    --border: 270 30% 25%;
+    --input: 270 30% 25%;
+    --ring: 260 55% 66%;
   }
 }
 
@@ -53,51 +96,340 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    @apply font-sans antialiased;
+    @apply transition-colors duration-300;
+  }
+
+  /* 🎭 Tipografía Museo */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* ============================================================================
+   🎨 COMPONENTES MUSEO
+   ============================================================================ */
 
-::-webkit-scrollbar-track {
-  @apply bg-muted;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-md;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/50;
-}
-
-/* Gradient backgrounds */
-.gradient-bg {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
-}
-
-/* Card hover effect */
-.card-hover {
-  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
-}
-
-/* NFT card shimmer effect */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
+@layer components {
+  /* 🖼️ Marco Dorado (para NFTs premium) */
+  .golden-frame {
+    @apply relative;
+    @apply before:absolute before:inset-0;
+    @apply before:border-2 before:border-museum-gold-500;
+    @apply before:rounded-lg;
+    @apply before:transition-all before:duration-300;
+    @apply hover:before:border-museum-gold-400;
+    @apply hover:before:shadow-gold;
   }
-  100% {
-    background-position: 1000px 0;
+
+  /* 🏛️ Card Museo */
+  .museum-card {
+    @apply bg-card rounded-xl;
+    @apply border border-museum-purple-200/20;
+    @apply shadow-museum;
+    @apply transition-all duration-500;
+    @apply hover:shadow-museum-lg;
+    @apply hover:-translate-y-1;
+    @apply hover:border-museum-purple-300/40;
+  }
+
+  .dark .museum-card {
+    @apply border-museum-purple-800/40;
+    @apply hover:border-museum-purple-700/60;
+  }
+
+  /* ✨ NFT Card con efecto elegante */
+  .nft-card {
+    @apply museum-card;
+    @apply overflow-hidden;
+    @apply cursor-pointer;
+  }
+
+  .nft-card-image {
+    @apply relative overflow-hidden rounded-t-xl;
+    @apply aspect-square;
+  }
+
+  /* Overlay sutil al hover */
+  .nft-card-image::after {
+    content: '';
+    @apply absolute inset-0;
+    @apply bg-gradient-to-t from-museum-purple-900/50 to-transparent;
+    @apply opacity-0 transition-opacity duration-500;
+  }
+
+  .nft-card:hover .nft-card-image::after {
+    @apply opacity-100;
+  }
+
+  /* 🎯 CTA Principal - Passionate */
+  .cta-primary {
+    @apply bg-museum-red-500 text-white;
+    @apply px-8 py-4 rounded-lg;
+    @apply font-semibold text-lg;
+    @apply shadow-lg shadow-museum-red-500/30;
+    @apply transition-all duration-300;
+    @apply hover:bg-museum-red-600;
+    @apply hover:shadow-xl hover:shadow-museum-red-500/40;
+    @apply hover:-translate-y-0.5;
+    @apply active:translate-y-0;
+  }
+
+  /* 🌅 CTA Secundario - Coral Orange */
+  .cta-secondary {
+    @apply bg-museum-orange-500 text-white;
+    @apply px-6 py-3 rounded-lg;
+    @apply font-medium;
+    @apply shadow-md shadow-museum-orange-500/20;
+    @apply transition-all duration-300;
+    @apply hover:bg-museum-orange-600;
+    @apply hover:shadow-lg hover:shadow-museum-orange-500/30;
+    @apply hover:-translate-y-0.5;
+  }
+
+  /* 💎 Badge Premium - Golden */
+  .badge-premium {
+    @apply inline-flex items-center gap-2;
+    @apply bg-gradient-to-r from-museum-gold-500 to-museum-gold-400;
+    @apply text-museum-purple-950;
+    @apply px-4 py-1.5 rounded-full;
+    @apply text-sm font-semibold;
+    @apply shadow-gold;
+  }
+
+  /* 🎨 Sección Hero - Museo */
+  .hero-museum {
+    @apply relative;
+    @apply min-h-screen;
+    @apply flex items-center justify-center;
+    @apply bg-museum-gradient;
+    @apply text-white;
+    @apply overflow-hidden;
+  }
+
+  /* Parallax layers */
+  .hero-museum::before {
+    content: '';
+    @apply absolute inset-0;
+    @apply bg-[url('/noise.png')] opacity-5;
+    @apply mix-blend-overlay;
+  }
+
+  /* 📜 Scrollbar Elegante */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-museum-purple-50;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-museum-purple-950;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-museum-purple-300 rounded-full;
+    @apply hover:bg-museum-purple-400;
+    @apply transition-colors;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-museum-purple-700;
+    @apply hover:bg-museum-purple-600;
+  }
+
+  /* ✨ Shimmer Effect para Loading */
+  .shimmer-museum {
+    @apply relative overflow-hidden;
+    @apply bg-gradient-to-r;
+    @apply from-museum-purple-100 via-museum-purple-50 to-museum-purple-100;
+    background-size: 200% 100%;
+    animation: shimmer-slide 2s infinite linear;
+  }
+
+  .dark .shimmer-museum {
+    @apply from-museum-purple-900 via-museum-purple-800 to-museum-purple-900;
+  }
+
+  @keyframes shimmer-slide {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* 🌟 Glow Effect para elementos destacados */
+  .glow-purple {
+    @apply shadow-[0_0_30px_rgba(154,122,215,0.4)];
+    @apply hover:shadow-[0_0_50px_rgba(154,122,215,0.6)];
+    @apply transition-shadow duration-500;
+  }
+
+  .glow-gold {
+    @apply shadow-[0_0_30px_rgba(228,175,37,0.4)];
+    @apply hover:shadow-[0_0_50px_rgba(228,175,37,0.6)];
+    @apply transition-shadow duration-500;
+  }
+
+  /* 🎭 Separador Decorativo */
+  .museum-divider {
+    @apply relative;
+    @apply h-px my-12;
+    @apply bg-gradient-to-r from-transparent via-museum-gold-500 to-transparent;
+    @apply opacity-30;
+  }
+
+  .museum-divider::before,
+  .museum-divider::after {
+    content: '◆';
+    @apply absolute top-1/2 -translate-y-1/2;
+    @apply text-museum-gold-500 text-xs;
+  }
+
+  .museum-divider::before {
+    @apply left-0;
+  }
+
+  .museum-divider::after {
+    @apply right-0;
   }
 }
 
-.shimmer {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-  background-size: 1000px 100%;
+/* ============================================================================
+   🎯 UTILITIES ESPECIALES
+   ============================================================================ */
+
+@layer utilities {
+  /* Espaciado generoso tipo museo */
+  .museum-spacing {
+    @apply space-y-16 md:space-y-24 lg:space-y-32;
+  }
+
+  /* Grid museo (espaciado generoso) */
+  .museum-grid {
+    @apply grid gap-8 md:gap-12 lg:gap-16;
+  }
+
+  /* Glass effect */
+  .glass-museum {
+    @apply bg-white/10 backdrop-blur-md;
+    @apply border border-white/20;
+  }
+
+  .dark .glass-museum {
+    @apply bg-museum-purple-900/30 backdrop-blur-md;
+    @apply border-museum-purple-700/30;
+  }
+
+  /* Text gradient */
+  .text-gradient-museum {
+    @apply bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-museum-purple-400 to-museum-gold-500;
+  }
+
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-museum-gold-400 to-museum-orange-500;
+  }
+
+  /* Perspective para efectos 3D sutiles */
+  .perspective-museum {
+    perspective: 1000px;
+  }
+
+  .transform-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* Animation delays */
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  .animation-delay-800 {
+    animation-delay: 800ms;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+}
+
+/* ============================================================================
+   📱 RESPONSIVE - Mobile First
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .hero-museum {
+    @apply min-h-[80vh];
+  }
+
+  .museum-grid {
+    @apply gap-6;
+  }
+
+  .museum-spacing {
+    @apply space-y-12;
+  }
+}
+
+/* ============================================================================
+   ♿ ACCESSIBILITY
+   ============================================================================ */
+
+/* Focus visible para navegación por teclado */
+*:focus-visible {
+  @apply outline-none;
+  @apply ring-2 ring-museum-purple-500 ring-offset-2;
+  @apply ring-offset-background;
+}
+
+/* Reduce motion para usuarios con preferencias */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================================
+   🎨 PRINT STYLES (para compartir NFTs)
+   ============================================================================ */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
+
+  .museum-card {
+    @apply border border-black;
+    box-shadow: none;
+  }
 }

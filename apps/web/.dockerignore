@@ -1,0 +1,32 @@
+# Frontend-specific Docker ignore
+node_modules
+.next
+out
+dist
+build
+
+# Environment
+.env*.local
+.env.development
+
+# Testing
+coverage
+**/__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Development
+.vscode
+.idea
+*.log
+.DS_Store
+
+# Documentation
+*.md
+README.md
+
+# Git
+.git
+.gitignore

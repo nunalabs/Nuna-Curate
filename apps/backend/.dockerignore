@@ -1,0 +1,33 @@
+# Backend-specific Docker ignore
+node_modules
+dist
+build
+
+# Environment
+.env*.local
+.env.development
+.env.test
+
+# Testing
+coverage
+test
+**/__tests__
+*.test.ts
+*.spec.ts
+
+# Development
+.vscode
+.idea
+*.log
+.DS_Store
+
+# Documentation
+*.md
+README.md
+
+# Git
+.git
+.gitignore
+
+# Uploads (will be volume-mounted)
+uploads

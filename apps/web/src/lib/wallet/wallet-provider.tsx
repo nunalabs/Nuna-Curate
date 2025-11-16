@@ -2,6 +2,9 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { StellarWalletsKit, WalletNetwork, ISupportedWallet } from '@creit.tech/stellar-wallets-kit';
+import { FreighterModule } from '@creit.tech/stellar-wallets-kit/modules/freighter.module';
+import { AlbedoModule } from '@creit.tech/stellar-wallets-kit/modules/albedo.module';
+import { xBullModule } from '@creit.tech/stellar-wallets-kit/modules/xbull.module';
 import { toast } from 'react-hot-toast';
 import { apiClient } from '@/lib/api/client';
 
@@ -51,7 +54,11 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     const walletKit = new StellarWalletsKit({
       network,
       selectedWalletId: 'freighter',
-      modules: [],
+      modules: [
+        new FreighterModule(),
+        new AlbedoModule(),
+        new xBullModule(),
+      ],
     });
 
     setKit(walletKit);

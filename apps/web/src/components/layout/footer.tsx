@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Twitter, Discord } from 'lucide-react';
+import { Github, Twitter, MessageCircle } from 'lucide-react';
 
 const footerLinks = {
   marketplace: [
@@ -24,7 +24,7 @@ const footerLinks = {
 
 const socialLinks = [
   { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-  { name: 'Discord', href: 'https://discord.com', icon: Discord },
+  { name: 'Discord', href: 'https://discord.com', icon: MessageCircle },
   { name: 'GitHub', href: 'https://github.com', icon: Github },
 ];
 
